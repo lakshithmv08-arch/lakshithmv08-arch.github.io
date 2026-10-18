@@ -322,7 +322,7 @@
   }
   .story-year.swap { opacity: 0; transform: translateY(30px); }
   .story-viewport { position: relative; flex: 1; overflow: hidden; z-index: 1; }
-  .story-track { position: absolute; top: 0; bottom: 0; left: 0; will-change: transform; }
+  .story-track { position: absolute; top: 0; bottom: 0; left: 0; will-change: transform; transition: transform .35s cubic-bezier(.2,.8,.2,1); }
   .story-line { position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px;
     background: repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px); }
   .story-line-fill { position: absolute; left: 0; top: 50%; height: 3px; margin-top: -1.5px; width: 0; border-radius: 3px;
@@ -898,7 +898,7 @@
     const tx = geo.startX + p * (geo.endX - geo.startX);
     let cur = 0; geo.xs.forEach((x, i) => { if (tx >= x - 4) cur = i; });
     let target = tx - geo.vw * geo.anchor;
-    if (geo.small) target = Math.min(target, geo.xs[cur] - 30); /* keep the active card fully on screen */
+    target = Math.min(target, geo.xs[cur] - 30); /* keep the active card fully on screen */
     const shift = Math.min(Math.max(target, 0), geo.trackW - geo.vw);
     sTrack.style.transform = `translateX(${-shift}px)`;
     sFill.style.width = tx + 'px';
