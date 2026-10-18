@@ -6,199 +6,604 @@
 <title>Lakshith M V | HR Analytics & Product</title>
 <meta name="description" content="Portfolio of Lakshith M V: HR Analyst and HR Business Partner at Shadowfax building workforce dashboards, MIS automation and HR tools, moving toward product roles.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f7f5f0;
-    --surface: #ffffff;
-    --text: #1d1c1a;
-    --muted: #5f5b53;
-    --line: #e2ddd3;
-    --accent: #1f5f4a;
-    --accent-soft: #e3efe9;
+    --bg: #0e0f0e;
+    --bg-2: #151715;
+    --surface: #181a18;
+    --text: #edece7;
+    --muted: #9c9a92;
+    --line: #2a2d2a;
+    --accent: #7cc4a6;
+    --accent-2: #e8c96a;
+    --accent-soft: rgba(124,196,166,.12);
+    --mx: 50vw;
+    --my: 30vh;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #141413;
-      --surface: #1d1c1a;
-      --text: #ecebe6;
-      --muted: #a39f95;
-      --line: #2f2d29;
-      --accent: #7cc4a6;
-      --accent-soft: #1f2f29;
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f7f5f0;
+      --bg-2: #efece4;
+      --surface: #ffffff;
+      --text: #1d1c1a;
+      --muted: #5f5b53;
+      --line: #e2ddd3;
+      --accent: #1f6f55;
+      --accent-2: #b8891c;
+      --accent-soft: rgba(31,111,85,.10);
     }
   }
+  :root[data-theme="light"] {
+    --bg: #f7f5f0; --bg-2: #efece4; --surface: #ffffff; --text: #1d1c1a; --muted: #5f5b53;
+    --line: #e2ddd3; --accent: #1f6f55; --accent-2: #b8891c; --accent-soft: rgba(31,111,85,.10);
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font: 16px/1.65 Inter, system-ui, sans-serif; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 Inter, system-ui, sans-serif;
+    overflow-x: hidden;
+  }
   a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+  ::selection { background: var(--accent); color: var(--bg); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; position: relative; }
 
+  /* ---------- Cursor-following spotlight on the whole page ---------- */
+  .spotlight {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(600px circle at var(--mx) var(--my), var(--accent-soft), transparent 60%);
+    transition: background .1s;
+  }
+  /* faint grid texture */
+  .grid-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .5;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(500px circle at var(--mx) var(--my), #000 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(500px circle at var(--mx) var(--my), #000 0%, transparent 70%);
+  }
+  main, nav, footer { position: relative; z-index: 1; }
+
+  /* ---------- Custom cursor (desktop only) ---------- */
+  .cursor-dot, .cursor-ring {
+    position: fixed; top: 0; left: 0; pointer-events: none; z-index: 100;
+    border-radius: 50%; transform: translate(-50%, -50%);
+    opacity: 0; transition: opacity .3s;
+  }
+  .cursor-dot { width: 7px; height: 7px; background: var(--accent); }
+  .cursor-ring {
+    width: 38px; height: 38px; border: 1.5px solid var(--accent);
+    transition: width .25s, height .25s, background .25s, border-color .25s, opacity .3s;
+  }
+  .cursor-ring.hover { width: 64px; height: 64px; background: var(--accent-soft); border-color: transparent; }
+  .cursor-ring.down { width: 28px; height: 28px; }
+  body.has-cursor .cursor-dot, body.has-cursor .cursor-ring { opacity: 1; }
+  body.has-cursor, body.has-cursor a, body.has-cursor button { cursor: none; }
+
+  /* ---------- Scroll progress ---------- */
+  .progress {
+    position: fixed; top: 0; left: 0; height: 2px; width: 100%; z-index: 50;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    transform-origin: 0 50%; transform: scaleX(0);
+  }
+
+  /* ---------- Nav ---------- */
   nav {
-    position: sticky; top: 0; z-index: 10;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(8px);
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--line);
   }
-  nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 56px; }
-  nav .brand { font-family: Fraunces, serif; font-weight: 700; color: var(--text); }
-  nav ul { display: flex; gap: 20px; list-style: none; font-size: 14px; }
-  nav ul a { color: var(--muted); }
-  @media (max-width: 640px) { nav ul { display: none; } }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 60px; }
+  nav .brand { font-family: Fraunces, serif; font-weight: 700; color: var(--text); font-size: 18px; }
+  nav .brand span { color: var(--accent); }
+  nav ul { display: flex; gap: 24px; list-style: none; font-size: 14px; }
+  nav ul a { color: var(--muted); position: relative; padding: 4px 0; transition: color .2s; }
+  nav ul a::after {
+    content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%;
+    background: var(--accent); transform: scaleX(0); transform-origin: right; transition: transform .35s ease;
+  }
+  nav ul a:hover, nav ul a.active { color: var(--text); }
+  nav ul a:hover::after, nav ul a.active::after { transform: scaleX(1); transform-origin: left; }
+  .theme-btn {
+    background: none; border: 1px solid var(--line); color: var(--text); width: 34px; height: 34px;
+    border-radius: 50%; display: grid; place-items: center; margin-left: 16px;
+  }
+  .nav-right { display: flex; align-items: center; }
+  @media (max-width: 680px) { nav ul { display: none; } }
 
-  header { padding: 88px 0 48px; }
-  .eyebrow { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
-  h1 { font-family: Fraunces, serif; font-size: clamp(34px, 6.5vw, 56px); line-height: 1.1; margin: 14px 0 20px; }
-  .lede { font-size: 19px; color: var(--muted); max-width: 660px; }
+  /* ---------- Hero ---------- */
+  header { padding: 96px 0 40px; display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: center; }
+  @media (max-width: 820px) { header { grid-template-columns: 1fr; padding-top: 64px; } }
+  .eyebrow {
+    font: 500 12px/1 "JetBrains Mono", monospace; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); display: inline-flex; align-items: center; gap: 10px;
+    border: 1px solid var(--line); padding: 8px 14px; border-radius: 99px; background: var(--surface);
+  }
+  .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); position: relative; }
+  .pulse::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--accent);
+    animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite;
+  }
+  @keyframes ping { 75%, 100% { transform: scale(2.6); opacity: 0; } }
+
+  h1 { font-family: Fraunces, serif; font-size: clamp(36px, 6.4vw, 60px); line-height: 1.06; margin: 22px 0 22px; }
+  h1 .word { display: inline-block; overflow: hidden; vertical-align: top; }
+  h1 .word > span { display: inline-block; transform: translateY(110%); animation: rise .9s cubic-bezier(.2,.8,.2,1) forwards; }
+  @keyframes rise { to { transform: translateY(0); } }
+  .grad {
+    background: linear-gradient(100deg, var(--accent), var(--accent-2), var(--accent));
+    background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: 200% center; } }
+
+  .lede { font-size: 18px; color: var(--muted); max-width: 580px; }
+  .typed { font-family: "JetBrains Mono", monospace; color: var(--accent); font-size: 15px; margin-top: 18px; min-height: 24px; }
+  .typed::after { content: "_"; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
   .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-  .btn { display: inline-block; padding: 11px 20px; border-radius: 8px; font-weight: 500; font-size: 15px; border: 1px solid var(--accent); }
-  .btn.primary { background: var(--accent); color: var(--bg); }
-  .btn:hover { text-decoration: none; opacity: .9; }
+  .btn {
+    position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px;
+    border-radius: 10px; font-weight: 500; font-size: 15px; border: 1px solid var(--line);
+    color: var(--text); background: var(--surface); overflow: hidden;
+    transition: transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .btn.primary::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.35), transparent 70%);
+    transform: translateX(-100%); transition: transform .6s;
+  }
+  .btn.primary:hover::before { transform: translateX(100%); }
+  .btn svg { width: 16px; height: 16px; transition: transform .25s; }
+  .btn:hover svg { transform: translateX(3px); }
 
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding-bottom: 72px; }
-  @media (max-width: 640px) { .stats { grid-template-columns: 1fr; } }
-  .stat { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
-  .stat b { display: block; font-family: Fraunces, serif; font-size: 40px; line-height: 1.1; }
-  .stat span { color: var(--muted); font-size: 15px; }
+  /* Hero SVG: orbit system */
+  .orbit-wrap { position: relative; aspect-ratio: 1; max-width: 400px; width: 100%; justify-self: center; }
+  .orbit-wrap svg { width: 100%; height: 100%; overflow: visible; }
+  .orbit { fill: none; stroke: var(--line); stroke-width: 1; }
+  .orbit.dash { stroke-dasharray: 4 8; animation: spin 40s linear infinite; transform-origin: 200px 200px; }
+  .spin-a { animation: spin 18s linear infinite; transform-origin: 200px 200px; }
+  .spin-b { animation: spin 28s linear infinite reverse; transform-origin: 200px 200px; }
+  .spin-c { animation: spin 40s linear infinite; transform-origin: 200px 200px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .node rect { fill: var(--surface); stroke: var(--line); }
+  .node text { fill: var(--text); font: 500 11px "JetBrains Mono", monospace; text-anchor: middle; dominant-baseline: middle; }
+  .core { fill: var(--accent); }
+  .core-glow { fill: var(--accent); opacity: .18; animation: breathe 3s ease-in-out infinite; transform-origin: 200px 200px; }
+  @keyframes breathe { 50% { transform: scale(1.35); opacity: .05; } }
+  .counter-rotate-a { animation: spin 18s linear infinite reverse; }
+  .counter-rotate-b { animation: spin 28s linear infinite; }
+  .counter-rotate-c { animation: spin 40s linear infinite reverse; }
+  .orbit-wrap .parallax { transition: transform .2s ease-out; }
 
-  section { padding: 56px 0; border-top: 1px solid var(--line); }
-  h2 { font-family: Fraunces, serif; font-size: 30px; margin-bottom: 8px; }
-  .sub { color: var(--muted); margin-bottom: 28px; }
+  /* ---------- Stats ---------- */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 24px 0 80px; }
+  @media (max-width: 680px) { .stats { grid-template-columns: 1fr; } }
+  .stat {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+    position: relative; overflow: hidden;
+  }
+  .stat b { display: block; font-family: Fraunces, serif; font-size: 44px; line-height: 1.1; color: var(--text); }
+  .stat span { color: var(--muted); font-size: 14px; }
+  .stat svg.spark { position: absolute; right: 14px; top: 18px; width: 90px; height: 36px; }
+  .spark path { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 200; stroke-dashoffset: 200; }
+  .spark .area { fill: var(--accent-soft); stroke: none; opacity: 0; transition: opacity 1s .8s; }
+  .in .spark path.line { animation: draw 1.6s .2s ease forwards; }
+  .in .spark .area { opacity: 1; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  /* ---------- Sections ---------- */
+  section { padding: 72px 0; border-top: 1px solid var(--line); }
+  .label { font: 500 12px "JetBrains Mono", monospace; color: var(--accent); letter-spacing: .1em; text-transform: uppercase; }
+  h2 { font-family: Fraunces, serif; font-size: clamp(28px, 4.5vw, 38px); margin: 6px 0 8px; }
+  .sub { color: var(--muted); margin-bottom: 32px; }
   h3 { font-size: 18px; font-weight: 600; }
   .muted { color: var(--muted); }
-
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  @media (max-width: 700px) { .two { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) { .two { grid-template-columns: 1fr; } }
 
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; }
-  .card .tag { align-self: flex-start; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); margin-bottom: 12px; }
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- Cards with cursor glow + 3D tilt ---------- */
+  .card {
+    --cx: 50%; --cy: 50%;
+    position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+    padding: 26px; display: flex; flex-direction: column; overflow: hidden;
+    transform-style: preserve-3d; transition: transform .2s ease-out, border-color .3s;
+    will-change: transform;
+  }
+  .card::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(380px circle at var(--cx) var(--cy), var(--accent-soft), transparent 45%);
+    opacity: 0; transition: opacity .3s;
+  }
+  .card::after { /* glowing border that follows the cursor */
+    content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none;
+    background: radial-gradient(240px circle at var(--cx) var(--cy), var(--accent), transparent 60%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity: 0; transition: opacity .3s;
+  }
+  .card:hover::before, .card:hover::after { opacity: 1; }
+  .card > * { position: relative; z-index: 1; }
+  .card .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .card .tag {
+    font: 500 11px "JetBrains Mono", monospace; letter-spacing: .05em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 99px; background: var(--accent-soft); color: var(--accent);
+  }
+  .card .icon { width: 40px; height: 40px; }
+  .card .icon * { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .card:hover .icon .anim { animation: wiggle .8s ease; }
+  @keyframes wiggle { 30% { transform: translateY(-3px); } 60% { transform: translateY(1px); } }
   .card p { margin-top: 8px; color: var(--muted); }
   .card ul { margin: 10px 0 0 18px; color: var(--muted); }
-  .card .stack { margin-top: auto; padding-top: 16px; font-size: 13px; color: var(--muted); }
-  .card .stack b { color: var(--text); font-weight: 600; }
+  .card .stack { margin-top: auto; padding-top: 18px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .card .stack span {
+    font: 12px "JetBrains Mono", monospace; color: var(--muted); border: 1px solid var(--line);
+    padding: 3px 8px; border-radius: 6px;
+  }
 
-  .job { display: grid; grid-template-columns: 170px 1fr; gap: 20px; }
-  @media (max-width: 600px) { .job { grid-template-columns: 1fr; gap: 4px; } }
-  .job ul { margin: 10px 0 0 18px; color: var(--muted); }
-  .job li { margin-bottom: 6px; }
+  /* ---------- Timeline ---------- */
+  .timeline { position: relative; padding-left: 34px; }
+  .timeline svg.rail { position: absolute; left: 6px; top: 6px; width: 4px; height: calc(100% - 12px); overflow: visible; }
+  .rail line { stroke: var(--line); stroke-width: 2; }
+  .rail line.fill { stroke: var(--accent); stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 2s ease; }
+  .timeline.in .rail line.fill { stroke-dashoffset: 0; }
+  .timeline .dot {
+    position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--accent); box-shadow: 0 0 0 6px var(--accent-soft);
+  }
+  .timeline ul { margin: 14px 0 0 18px; color: var(--muted); }
+  .timeline li { margin-bottom: 8px; opacity: 0; transform: translateX(-10px); transition: opacity .5s, transform .5s; }
+  .timeline.in li { opacity: 1; transform: none; }
+  .timeline li strong { color: var(--text); font-weight: 600; }
 
-  .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
-  @media (max-width: 700px) { .skills { grid-template-columns: 1fr; } }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-  .chip { border: 1px solid var(--line); background: var(--surface); padding: 5px 12px; border-radius: 99px; font-size: 14px; }
+  /* ---------- Marquee ---------- */
+  .marquee { overflow: hidden; border-block: 1px solid var(--line); padding: 18px 0; margin-bottom: 40px;
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .marquee-track { display: flex; gap: 40px; width: max-content; animation: scroll 30s linear infinite; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  .marquee-track span { font-family: Fraunces, serif; font-size: 26px; color: var(--muted); white-space: nowrap; transition: color .2s; }
+  .marquee-track span:hover { color: var(--accent); }
+  .marquee-track span::after { content: "\2726"; margin-left: 40px; color: var(--accent); font-size: 16px; vertical-align: middle; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
 
-  footer { padding: 40px 0 60px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+  /* ---------- Skills with animated bars ---------- */
+  .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  @media (max-width: 720px) { .skills { grid-template-columns: 1fr; } }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip {
+    border: 1px solid var(--line); background: var(--bg-2); padding: 6px 12px; border-radius: 99px; font-size: 14px;
+    transition: transform .2s, border-color .2s, color .2s;
+  }
+  .chip:hover { transform: translateY(-3px); border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- Contact ---------- */
+  .contact-box {
+    position: relative; border: 1px solid var(--line); border-radius: 22px; padding: 56px 32px; text-align: center;
+    background: var(--surface); overflow: hidden;
+  }
+  .contact-box svg.waves { position: absolute; left: 0; bottom: 0; width: 100%; height: 120px; opacity: .5; }
+  .waves path { fill: none; stroke: var(--accent); stroke-width: 1.2; }
+  .waves .w1 { animation: wave 8s ease-in-out infinite; }
+  .waves .w2 { animation: wave 11s ease-in-out infinite reverse; opacity: .6; }
+  .waves .w3 { animation: wave 14s ease-in-out infinite; opacity: .3; }
+  @keyframes wave { 50% { transform: translateX(-60px); } }
+  .contact-box .cta { justify-content: center; }
+  .contact-box h2 { font-size: clamp(30px, 5vw, 46px); }
+
+  /* ---------- Horizontal story timeline (scroll down -> moves sideways) ---------- */
+  section.story { padding: 0; height: 700vh; position: relative; }
+  .story-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; padding-top: 84px; }
+  .story-head {
+    max-width: 980px; width: 100%; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2;
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap;
+  }
+  .story-head h2 { margin: 4px 0 0; }
+  .story-meter { display: flex; align-items: center; gap: 14px; font: 500 12px "JetBrains Mono", monospace; color: var(--muted); }
+  .story-meter .track { width: 180px; height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .story-meter .fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transform-origin: 0 50%; transform: scaleX(0); }
+  .story-year {
+    position: absolute; right: -10px; bottom: -30px; pointer-events: none; z-index: 0;
+    font: 700 clamp(110px, 22vw, 250px)/1 Fraunces, serif; color: transparent; -webkit-text-stroke: 1px var(--line);
+    transition: opacity .4s, transform .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .story-year.swap { opacity: 0; transform: translateY(30px); }
+  .story-viewport { position: relative; flex: 1; overflow: hidden; z-index: 1; }
+  .story-track { position: absolute; top: 0; bottom: 0; left: 0; will-change: transform; }
+  .story-line { position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px;
+    background: repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px); }
+  .story-line-fill { position: absolute; left: 0; top: 50%; height: 3px; margin-top: -1.5px; width: 0; border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow: 0 0 12px rgba(124,196,166,.35); }
+  .story-traveler { position: absolute; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; z-index: 3;
+    background: var(--accent-2); box-shadow: 0 0 0 8px rgba(232,201,106,.18), 0 0 26px var(--accent-2); }
+  .story-hint { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 2;
+    font: 12px "JetBrains Mono", monospace; color: var(--muted); transition: opacity .4s; white-space: nowrap; }
+  .story-hint span { display: inline-block; animation: nudgeX 1.4s ease-in-out infinite; }
+  @keyframes nudgeX { 50% { transform: translateX(6px); } }
+
+  .tl-node { position: absolute; top: 0; bottom: 0; width: 0; }
+  .tl-dot { position: absolute; left: 0; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; z-index: 2;
+    background: var(--bg); border: 2px solid var(--line); transition: background .4s, border-color .4s; }
+  .tl-dot::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; background: var(--accent); opacity: 0; }
+  .tl-node.lit .tl-dot { background: var(--accent); border-color: var(--accent); }
+  .tl-node.current .tl-dot::after { animation: halo 1.6s ease-out infinite; }
+  @keyframes halo { 0% { opacity: .5; transform: scale(1); } 100% { opacity: 0; transform: scale(3); } }
+  .tl-year { position: absolute; left: 0; transform: translateX(-50%); font: 500 13px "JetBrains Mono", monospace; color: var(--muted); white-space: nowrap; transition: color .4s; }
+  .up .tl-year { top: calc(50% + 20px); }
+  .down .tl-year { bottom: calc(50% + 20px); }
+  .tl-node.lit .tl-year { color: var(--accent-2); }
+  .tl-stem { position: absolute; left: 0; width: 2px; margin-left: -1px; height: 34px; background: var(--line); }
+  .tl-stem i { position: absolute; inset: 0; background: var(--accent); transform: scaleY(0); transition: transform .4s ease; }
+  .up .tl-stem { bottom: calc(50% + 11px); } .up .tl-stem i { transform-origin: 50% 100%; }
+  .down .tl-stem { top: calc(50% + 11px); } .down .tl-stem i { transform-origin: 50% 0; }
+  .tl-node.lit .tl-stem i { transform: scaleY(1); }
+  .tl-card {
+    position: absolute; left: -22px; width: var(--cardw, 360px);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px;
+    opacity: .28; transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1), border-color .5s, box-shadow .5s;
+  }
+  .up .tl-card { bottom: calc(50% + 45px); transform: translateY(16px); }
+  .down .tl-card { top: calc(50% + 45px); transform: translateY(-16px); }
+  .tl-node.lit .tl-card { opacity: 1; transform: none; border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+  .tl-node.current .tl-card { box-shadow: 0 18px 50px -20px rgba(124,196,166,.35); }
+  .tl-card .kicker { font: 500 11px "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  .tl-card h3 { font-family: Fraunces, serif; font-size: 22px; line-height: 1.2; margin: 6px 0 2px; }
+  .subs { list-style: none; margin-top: 12px; }
+  .subs li { position: relative; padding-left: 24px; font-size: 14px; line-height: 1.45; color: var(--muted); margin-bottom: 10px; transition: color .4s; }
+  .subs li:last-child { margin-bottom: 0; }
+  .subs li::before { content: ""; position: absolute; left: 0; top: 4px; width: 10px; height: 10px; border-radius: 50%; z-index: 1;
+    border: 2px solid var(--line); background: var(--surface); transition: background .35s, border-color .35s, box-shadow .35s, transform .35s; }
+  .subs li::after { content: ""; position: absolute; left: 6px; top: 18px; bottom: -8px; width: 2px; margin-left: -1px; background: var(--line); transition: background .35s; }
+  .subs li:last-child::after { display: none; }
+  .subs li.on { color: var(--text); }
+  .subs li.on::before { background: var(--accent-2); border-color: var(--accent-2); box-shadow: 0 0 0 4px rgba(232,201,106,.15); transform: scale(1.1); }
+  .subs li.on::after { background: color-mix(in srgb, var(--accent-2) 60%, var(--line)); }
+  .subs b { color: var(--accent); font-weight: 600; }
+
+  @media (max-width: 640px) {
+    .story-stage { padding-top: 74px; }
+    .tl-card { padding: 14px 16px; }
+    .tl-card h3 { font-size: 18px; }
+    .subs li { font-size: 13px; margin-bottom: 7px; }
+    .tl-stem { height: 24px; }
+    .story-track { transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+    .up .tl-card { bottom: calc(50% + 35px); } .down .tl-card { top: calc(50% + 35px); }
+  }
+  @media (max-height: 720px) {
+    .tl-card h3 { font-size: 18px; } .subs li { font-size: 13px; margin-bottom: 6px; } .story-head h2 { font-size: 26px; }
+  }
+
+  footer { padding: 40px 0 60px; font-size: 13px; color: var(--muted); font-family: "JetBrains Mono", monospace; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  /* Respect users who turn off motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal, .timeline li { opacity: 1 !important; transform: none !important; }
+    h1 .word > span { transform: none; }
+    .spark path { stroke-dashoffset: 0; }
+  }
 </style>
 </head>
 <body>
 
+<div class="spotlight"></div>
+<div class="grid-bg"></div>
+<div class="progress" id="progress"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
 <nav>
   <div class="wrap">
-    <a class="brand" href="#">Lakshith M V</a>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#work">Experience</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+    <a class="brand" href="#">Lakshith<span>.</span></a>
+    <div class="nav-right">
+      <ul id="navLinks">
+        <li><a href="#story">Story</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#work">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
   </div>
 </nav>
 
+<main>
 <header class="wrap">
-  <div class="eyebrow">HR Analytics &middot; MIS Automation &middot; Product</div>
-  <h1>I build the dashboards and automations that HR and Operations run on.</h1>
-  <p class="lede">HR Analyst and HR Business Partner at Shadowfax, working on workforce analytics, payroll, people cost and manpower planning. I write SQL and Apps Script, ship internal tools, and write requirements for the systems teams depend on.</p>
-  <div class="cta">
-    <a class="btn primary" href="#projects">See my work</a>
-    <a class="btn" href="resume.pdf">Download resume</a>
+  <div>
+    <div class="eyebrow"><span class="pulse"></span>Open to product &amp; analytics roles</div>
+    <h1 id="headline">I build the dashboards and automations that <span class="grad">HR and Operations</span> run on.</h1>
+    <p class="lede">HR Analyst and HR Business Partner at Shadowfax, working on workforce analytics, payroll, people cost and manpower planning. I write SQL and Apps Script, ship internal tools, and write requirements for the systems teams depend on.</p>
+    <div class="typed" id="typed"></div>
+    <div class="cta">
+      <a class="btn primary magnetic" href="#projects">See my work
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn magnetic" href="resume.pdf">Download resume
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Animated orbit: tools orbiting the core -->
+  <div class="orbit-wrap" aria-hidden="true">
+    <svg viewBox="0 0 400 400" class="parallax" id="orbitSvg">
+      <defs>
+        <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="var(--accent-2)"/>
+          <stop offset="100%" stop-color="var(--accent)"/>
+        </radialGradient>
+      </defs>
+      <circle class="orbit" cx="200" cy="200" r="80"/>
+      <circle class="orbit dash" cx="200" cy="200" r="135"/>
+      <circle class="orbit" cx="200" cy="200" r="188"/>
+
+      <circle class="core-glow" cx="200" cy="200" r="46"/>
+      <circle cx="200" cy="200" r="34" fill="url(#coreGrad)"/>
+      <text x="200" y="201" text-anchor="middle" dominant-baseline="middle" style="font:700 15px Fraunces,serif;fill:var(--bg)">LMV</text>
+
+      <g class="spin-a">
+        <g class="node" transform="translate(200 120)"><g class="counter-rotate-a" style="transform-origin:0 0"><rect x="-26" y="-13" width="52" height="26" rx="13"/><text>SQL</text></g></g>
+        <g class="node" transform="translate(200 280)"><g class="counter-rotate-a" style="transform-origin:0 0"><rect x="-30" y="-13" width="60" height="26" rx="13"/><text>Excel</text></g></g>
+      </g>
+      <g class="spin-b">
+        <g class="node" transform="translate(65 200)"><g class="counter-rotate-b" style="transform-origin:0 0"><rect x="-42" y="-13" width="84" height="26" rx="13"/><text>AppsScript</text></g></g>
+        <g class="node" transform="translate(335 200)"><g class="counter-rotate-b" style="transform-origin:0 0"><rect x="-24" y="-13" width="48" height="26" rx="13"/><text>n8n</text></g></g>
+        <g class="node" transform="translate(200 65)"><g class="counter-rotate-b" style="transform-origin:0 0"><rect x="-26" y="-13" width="52" height="26" rx="13"/><text>Jira</text></g></g>
+      </g>
+      <g class="spin-c">
+        <g class="node" transform="translate(67 67)"><g class="counter-rotate-c" style="transform-origin:0 0"><rect x="-30" y="-13" width="60" height="26" rx="13"/><text>Figma</text></g></g>
+        <g class="node" transform="translate(333 333)"><g class="counter-rotate-c" style="transform-origin:0 0"><rect x="-32" y="-13" width="64" height="26" rx="13"/><text>Sheets</text></g></g>
+        <g class="node" transform="translate(333 67)"><g class="counter-rotate-c" style="transform-origin:0 0"><rect x="-22" y="-13" width="44" height="26" rx="13"/><text>AI</text></g></g>
+        <circle cx="67" cy="333" r="5" fill="var(--accent-2)"/>
+      </g>
+    </svg>
   </div>
 </header>
 
 <div class="wrap stats">
-  <div class="stat"><b>30%</b><span>lower hiring cost through attrition- and load-based hiring plans</span></div>
-  <div class="stat"><b>4%</b><span>monthly attrition, against a 12% average at other sites and competitors</span></div>
-  <div class="stat"><b>4 &rarr; 1</b><span>people needed for HR reporting after automating data flows</span></div>
+  <div class="stat reveal">
+    <svg class="spark" viewBox="0 0 90 36"><path class="area" d="M2 8 L20 12 L38 14 L56 22 L74 26 L88 30 L88 36 L2 36Z"/><path class="line" d="M2 8 L20 12 L38 14 L56 22 L74 26 L88 30"/></svg>
+    <b><span class="count" data-to="30">0</span>%</b><span>lower hiring cost through attrition- and load-based hiring plans</span>
+  </div>
+  <div class="stat reveal">
+    <svg class="spark" viewBox="0 0 90 36"><path class="area" d="M2 26 L20 22 L38 24 L56 20 L74 22 L88 21 L88 36 L2 36Z"/><path class="line" d="M2 26 L20 22 L38 24 L56 20 L74 22 L88 21"/></svg>
+    <b><span class="count" data-to="4">0</span>%</b><span>monthly attrition, against a 12% average at other sites and competitors</span>
+  </div>
+  <div class="stat reveal">
+    <svg class="spark" viewBox="0 0 90 36"><path class="area" d="M2 6 L30 6 L44 28 L88 28 L88 36 L2 36Z"/><path class="line" d="M2 6 L30 6 L44 28 L88 28"/></svg>
+    <b><span class="count" data-to="4" data-from="1">4</span> &rarr; 1</b><span>people needed for HR reporting after automating data flows</span>
+  </div>
 </div>
+
+<section class="story" id="story">
+  <div class="story-stage">
+    <div class="story-year" id="storyYear">2020</div>
+    <div class="story-head">
+      <div>
+        <div class="label">My story</div>
+        <h2>From numbers to products</h2>
+      </div>
+      <div class="story-meter"><span id="storyCount">01 / 06</span><div class="track"><div class="fill" id="storyFill"></div></div></div>
+    </div>
+    <div class="story-viewport" id="storyViewport">
+      <div class="story-track" id="storyTrack">
+        <div class="story-line"></div>
+        <div class="story-line-fill" id="storyLineFill"></div>
+        <div class="story-traveler" id="storyTraveler"></div>
+      </div>
+      <div class="story-hint" id="storyHint">Scroll down to travel through the timeline <span>&rarr;</span></div>
+    </div>
+  </div>
+</section>
 
 <section id="about">
   <div class="wrap">
-    <h2>About</h2>
-    <div class="two" style="margin-top:20px">
-      <p>I sit between HR, Operations and Strategy at a large logistics company. My day is about turning headcount, attendance, attrition and payroll data into decisions site and planning teams can act on, and then automating the reporting so nobody has to rebuild it by hand.</p>
-      <p>Much of what I build is product work in practice: gathering requirements, prototyping, shipping internal tools like an attendance system and an employee self-service portal, and contributing to the BRD for an in-house HRMS. I'm looking for roles in product, product analytics and people analytics where I can keep doing that.</p>
+    <div class="reveal">
+      <div class="label">01 / About</div>
+      <h2>Where data, process and people meet</h2>
+    </div>
+    <div class="two" style="margin-top:24px">
+      <p class="reveal muted">I sit between HR, Operations and Strategy at a large logistics company. My day is about turning headcount, attendance, attrition and payroll data into decisions site and planning teams can act on, and then automating the reporting so nobody has to rebuild it by hand.</p>
+      <p class="reveal muted">Much of what I build is product work in practice: gathering requirements, prototyping, shipping internal tools like an attendance system and an employee self-service portal, and contributing to the BRD for an in-house HRMS. I'm looking for roles in product, product analytics and people analytics where I can keep doing that.</p>
     </div>
   </div>
 </section>
 
 <section id="work">
   <div class="wrap">
-    <h2>Experience</h2>
-    <p class="sub">1 year of full-time experience</p>
-    <div class="job">
-      <div class="muted">Sep 2025 &ndash; Present</div>
-      <div>
-        <h3>HR Business Partner &ndash; HR Analyst</h3>
-        <div class="muted">Shadowfax Technologies Pvt. Ltd.</div>
-        <ul>
-          <li>Reduced hiring cost by 30% by planning hiring in advance from projected attrition and peak load, with Operations and the Strategy, Planning &amp; Analysis teams.</li>
-          <li>Maintained monthly attrition at 4%, against a 12% average at other sites and competitors.</li>
-          <li>Reduced day-on-day absenteeism by driving roster adherence aligned with volume projections and site load.</li>
-          <li>Gave planning and site teams daily visibility into headcount, attendance, absenteeism and productivity.</li>
-          <li>Helped develop the Business Requirements Document for an in-house HRMS as the Payroll and HRBP subject matter expert.</li>
-          <li>Automated HR data flows with Apps Script, SQL and AI tools, cutting reporting staffing needs from 4 people to 1.</li>
-        </ul>
-      </div>
+    <div class="reveal">
+      <div class="label">02 / Experience</div>
+      <h2>1 year at Shadowfax</h2>
+      <p class="sub">HR Business Partner &ndash; HR Analyst &middot; Sep 2025 &ndash; Present</p>
+    </div>
+    <div class="timeline reveal" id="timeline">
+      <svg class="rail" preserveAspectRatio="none" viewBox="0 0 4 100"><line x1="2" y1="0" x2="2" y2="100"/><line class="fill" x1="2" y1="0" x2="2" y2="100" pathLength="1000"/></svg>
+      <span class="dot"></span>
+      <h3>Shadowfax Technologies Pvt. Ltd.</h3>
+      <ul>
+        <li>Reduced hiring cost by <strong>30%</strong> by planning hiring in advance from projected attrition and peak load, with Operations and the Strategy, Planning &amp; Analysis teams.</li>
+        <li>Maintained monthly attrition at <strong>4%</strong>, against a 12% average at other sites and competitors.</li>
+        <li>Reduced day-on-day absenteeism by driving roster adherence aligned with volume projections and site load.</li>
+        <li>Gave planning and site teams daily visibility into headcount, attendance, absenteeism and productivity.</li>
+        <li>Helped develop the Business Requirements Document for an in-house HRMS as the Payroll and HRBP subject matter expert.</li>
+        <li>Automated HR data flows with Apps Script, SQL and AI tools, cutting reporting staffing needs from <strong>4 people to 1</strong>.</li>
+      </ul>
     </div>
   </div>
 </section>
 
 <section id="projects">
   <div class="wrap">
-    <h2>Projects</h2>
-    <p class="sub">Internal tools and automations built at Shadowfax</p>
+    <div class="reveal">
+      <div class="label">03 / Projects</div>
+      <h2>Tools I've built</h2>
+      <p class="sub">Internal products and automations shipped at Shadowfax</p>
+    </div>
     <div class="two">
-      <div class="card">
-        <span class="tag">HR automation</span>
+      <div class="card tilt reveal">
+        <div class="top"><span class="tag">HR automation</span>
+          <svg class="icon" viewBox="0 0 40 40"><rect x="6" y="9" width="28" height="25" rx="4"/><path d="M6 16h28M13 5v7M27 5v7"/><path class="anim" d="M14 25l4 4 8-8"/></svg></div>
         <h3>Matrix: Pan-India attendance system</h3>
         <p>An attendance automation and validation system used across India, paired with an attendance kiosk that captures logs and processes attendance automatically.</p>
-        <div class="stack"><b>Built with:</b> Apps Script, Google Sheets, SQL</div>
+        <div class="stack"><span>Apps Script</span><span>Google Sheets</span><span>SQL</span></div>
       </div>
-      <div class="card">
-        <span class="tag">Analytics</span>
-        <h3>All-in-one leadership &amp; workforce dashboards</h3>
+      <div class="card tilt reveal">
+        <div class="top"><span class="tag">Analytics</span>
+          <svg class="icon" viewBox="0 0 40 40"><path d="M6 34h28"/><path class="anim" d="M10 28V20M17 28V12M24 28V17M31 28V8"/></svg></div>
+        <h3>Leadership &amp; workforce dashboards</h3>
         <p>One view that brings together operational dashboards, KPI scorecards and site reports, improving leadership visibility and follow-ups.</p>
         <ul>
           <li>Real-time active and on-floor headcount</li>
           <li>Manpower projections</li>
           <li>One-year attendance, absenteeism, cost and trend views</li>
         </ul>
-        <div class="stack"><b>Built with:</b> SQL, Google Sheets, Apps Script</div>
+        <div class="stack"><span>SQL</span><span>Google Sheets</span><span>Apps Script</span></div>
       </div>
-      <div class="card">
-        <span class="tag">MIS automation</span>
+      <div class="card tilt reveal">
+        <div class="top"><span class="tag">MIS automation</span>
+          <svg class="icon" viewBox="0 0 40 40"><rect x="5" y="10" width="30" height="21" rx="3"/><path class="anim" d="M5 12l15 11 15-11"/></svg></div>
         <h3>Automated MIS &amp; mailer engine</h3>
         <p>Scheduled report refreshes, validation checks and mailers for HR and Operations reviews, replacing manual weekly and monthly reporting.</p>
-        <div class="stack"><b>Built with:</b> Apps Script time triggers, SQL, Google Sheets</div>
+        <div class="stack"><span>Time triggers</span><span>SQL</span><span>Google Sheets</span></div>
       </div>
-      <div class="card">
-        <span class="tag">Self-service</span>
+      <div class="card tilt reveal">
+        <div class="top"><span class="tag">Self-service</span>
+          <svg class="icon" viewBox="0 0 40 40"><circle class="anim" cx="20" cy="14" r="6"/><path d="M8 34c1-7 6-11 12-11s11 4 12 11"/></svg></div>
         <h3>Employee HR portal</h3>
         <p>A self-service portal that gives employees direct access to their own HR data, reducing routine queries to the HR team.</p>
-        <div class="stack"><b>Built with:</b> Apps Script, Google Sheets</div>
+        <div class="stack"><span>Apps Script</span><span>Google Sheets</span></div>
       </div>
-      <div class="card">
-        <span class="tag">Requirements</span>
+      <div class="card tilt reveal">
+        <div class="top"><span class="tag">Requirements</span>
+          <svg class="icon" viewBox="0 0 40 40"><path d="M10 5h14l7 7v23H10z"/><path d="M24 5v7h7"/><path class="anim" d="M15 20h11M15 25h11M15 30h7"/></svg></div>
         <h3>In-house HRMS: BRD contribution</h3>
         <p>Defined payroll and HRBP requirements as subject matter expert for a new in-house HRMS, translating day-to-day HR processes into system requirements.</p>
-        <div class="stack"><b>Skills:</b> Requirements gathering, BRD writing, stakeholder management</div>
+        <div class="stack"><span>Requirements</span><span>BRD</span><span>Stakeholders</span></div>
       </div>
-      <div class="card">
-        <span class="tag">Operations</span>
+      <div class="card tilt reveal">
+        <div class="top"><span class="tag">Operations</span>
+          <svg class="icon" viewBox="0 0 40 40"><circle cx="18" cy="18" r="10"/><path class="anim" d="M26 26l8 8"/><path d="M14 18h8M18 14v8"/></svg></div>
         <h3>Pendency tracker &amp; product search</h3>
         <p>A real-time day-on-day pendency tracker for Operations, plus a text-to-image automation that searches products by their description.</p>
-        <div class="stack"><b>Built with:</b> Apps Script, Generative AI tools</div>
+        <div class="stack"><span>Apps Script</span><span>Generative AI</span></div>
       </div>
     </div>
   </div>
@@ -206,70 +611,57 @@
 
 <section id="skills">
   <div class="wrap">
-    <h2>Skills</h2>
-    <div class="skills" style="margin-top:20px">
-      <div>
-        <h3>Data &amp; reporting</h3>
-        <div class="chips">
-          <span class="chip">SQL</span>
-          <span class="chip">Advanced Excel</span>
-          <span class="chip">Google Sheets</span>
-          <span class="chip">Workforce dashboards</span>
-          <span class="chip">Operational MIS</span>
-        </div>
-      </div>
-      <div>
-        <h3>Automation</h3>
-        <div class="chips">
-          <span class="chip">Google Apps Script</span>
-          <span class="chip">n8n</span>
-          <span class="chip">Scheduled mailers</span>
-          <span class="chip">Generative AI tools</span>
-        </div>
-      </div>
-      <div>
-        <h3>Product</h3>
-        <div class="chips">
-          <span class="chip">Requirements &amp; BRDs</span>
-          <span class="chip">Jira (backlog, sprints)</span>
-          <span class="chip">Figma prototyping</span>
-          <span class="chip">HRMS implementation</span>
-        </div>
-      </div>
-      <div>
-        <h3>HR analytics</h3>
-        <div class="chips">
-          <span class="chip">Headcount &amp; attrition</span>
-          <span class="chip">Absenteeism &amp; attendance</span>
-          <span class="chip">Productivity</span>
-          <span class="chip">Payroll &amp; people cost</span>
-          <span class="chip">Workforce planning</span>
-        </div>
-      </div>
+    <div class="reveal">
+      <div class="label">04 / Skills</div>
+      <h2>Toolkit</h2>
+    </div>
+  </div>
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>SQL</span><span>Apps Script</span><span>Workforce Planning</span><span>n8n</span><span>Dashboards</span><span>BRDs</span><span>Jira</span><span>Figma</span><span>People Analytics</span>
+      <span>SQL</span><span>Apps Script</span><span>Workforce Planning</span><span>n8n</span><span>Dashboards</span><span>BRDs</span><span>Jira</span><span>Figma</span><span>People Analytics</span>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="skills">
+      <div class="card tilt reveal"><h3>Data &amp; reporting</h3>
+        <div class="chips"><span class="chip">SQL</span><span class="chip">Advanced Excel</span><span class="chip">Google Sheets</span><span class="chip">Workforce dashboards</span><span class="chip">Operational MIS</span></div></div>
+      <div class="card tilt reveal"><h3>Automation</h3>
+        <div class="chips"><span class="chip">Google Apps Script</span><span class="chip">n8n</span><span class="chip">Scheduled mailers</span><span class="chip">Generative AI tools</span></div></div>
+      <div class="card tilt reveal"><h3>Product</h3>
+        <div class="chips"><span class="chip">Requirements &amp; BRDs</span><span class="chip">Jira (backlog, sprints)</span><span class="chip">Figma prototyping</span><span class="chip">HRMS implementation</span></div></div>
+      <div class="card tilt reveal"><h3>HR analytics</h3>
+        <div class="chips"><span class="chip">Headcount &amp; attrition</span><span class="chip">Absenteeism</span><span class="chip">Productivity</span><span class="chip">Payroll &amp; people cost</span><span class="chip">Workforce planning</span></div></div>
     </div>
   </div>
 </section>
 
 <section id="education">
   <div class="wrap">
-    <h2>Education &amp; certifications</h2>
-    <div class="two" style="margin-top:20px">
-      <div class="card">
+    <div class="reveal">
+      <div class="label">05 / Education</div>
+      <h2>Education &amp; certifications</h2>
+    </div>
+    <div class="two" style="margin-top:24px">
+      <div class="card tilt reveal">
+        <span class="tag" style="align-self:flex-start;margin-bottom:12px">2023 &ndash; 2025</span>
         <h3>M.Sc. Strategic Management</h3>
-        <p>Christ University, Bengaluru &middot; 2023&ndash;2025</p>
+        <p>Christ University, Bengaluru</p>
         <p>Strategic Management, Business Analytics and Data Governance, Managing Technology and Innovation, Quantitative Techniques, Marketing Management</p>
       </div>
-      <div class="card">
+      <div class="card tilt reveal">
+        <span class="tag" style="align-self:flex-start;margin-bottom:12px">2020 &ndash; 2023</span>
         <h3>B.Com (Honours)</h3>
-        <p>Garden City University, Bengaluru &middot; 2020&ndash;2023</p>
+        <p>Garden City University, Bengaluru</p>
       </div>
-      <div class="card">
+      <div class="card tilt reveal">
+        <span class="tag" style="align-self:flex-start;margin-bottom:12px">BITSoM</span>
         <h3>Product Management with Generative &amp; Agentic AI</h3>
-        <p>BITSoM &middot; AI-powered product management, n8n workflow automation, Jira backlog and sprint management, Figma prototyping</p>
+        <p>AI-powered product management, n8n workflow automation, Jira backlog and sprint management, Figma prototyping</p>
       </div>
-      <div class="card">
+      <div class="card tilt reveal">
+        <span class="tag" style="align-self:flex-start;margin-bottom:12px">Coursera</span>
         <h3>Google Project Management Certificate</h3>
-        <p>Coursera</p>
       </div>
     </div>
   </div>
@@ -277,19 +669,280 @@
 
 <section id="contact">
   <div class="wrap">
-    <h2>Let's talk</h2>
-    <p class="lede" style="margin-top:12px">Open to Product Analyst, Associate Product Manager, HR analytics and HRBP roles.</p>
-    <div class="cta">
-      <a class="btn primary" href="mailto:lakshithm.v08@gmail.com">lakshithm.v08@gmail.com</a>
-      <a class="btn" href="https://www.linkedin.com/in/YOUR-LINKEDIN">LinkedIn</a>
-      <a class="btn" href="https://github.com/YOUR-USERNAME">GitHub</a>
+    <div class="contact-box reveal">
+      <svg class="waves" viewBox="0 0 1000 120" preserveAspectRatio="none">
+        <path class="w1" d="M-100 70 Q 50 30 200 70 T 500 70 T 800 70 T 1100 70"/>
+        <path class="w2" d="M-100 85 Q 50 50 200 85 T 500 85 T 800 85 T 1100 85"/>
+        <path class="w3" d="M-100 100 Q 50 70 200 100 T 500 100 T 800 100 T 1100 100"/>
+      </svg>
+      <div class="label">06 / Contact</div>
+      <h2>Let's build something useful.</h2>
+      <p class="muted" style="margin-top:10px">Open to Product Analyst, Associate Product Manager, HR analytics and HRBP roles.</p>
+      <div class="cta">
+        <a class="btn primary magnetic" href="mailto:lakshithm.v08@gmail.com">lakshithm.v08@gmail.com</a>
+        <a class="btn magnetic" href="https://www.linkedin.com/in/YOUR-LINKEDIN">LinkedIn</a>
+        <a class="btn magnetic" href="https://github.com/lakshithmv08-arch">GitHub</a>
+      </div>
     </div>
   </div>
 </section>
+</main>
 
 <footer>
-  <div class="wrap">&copy; 2026 Lakshith M V &middot; Bengaluru</div>
+  <div class="wrap"><span>&copy; 2026 Lakshith M V</span><span>Bengaluru &middot; Built by hand with HTML, CSS &amp; SVG</span></div>
 </footer>
 
+<script>
+(function () {
+  const root = document.documentElement;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* Theme toggle (remembered per browser) */
+  try { const t = localStorage.getItem('theme'); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const dark = getComputedStyle(root).getPropertyValue('--bg').trim() === '#0e0f0e';
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  });
+
+  /* Headline: split into words that rise in one by one */
+  const h1 = document.getElementById('headline');
+  if (!reduce) {
+    let i = 0;
+    const wrapWords = (node) => {
+      [...node.childNodes].forEach((child) => {
+        if (child.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach((part) => {
+            if (!part.trim()) { frag.appendChild(document.createTextNode(part)); return; }
+            const w = document.createElement('span'); w.className = 'word';
+            const s = document.createElement('span'); s.textContent = part;
+            s.style.animationDelay = (i++ * 0.06) + 's';
+            w.appendChild(s); frag.appendChild(w);
+          });
+          node.replaceChild(frag, child);
+        } else if (child.nodeType === 1 && child.classList.contains('grad')) {
+          /* keep the gradient phrase as one unit so its text gradient isn't broken */
+          const w = document.createElement('span'); w.className = 'word';
+          const s = document.createElement('span'); s.style.animationDelay = (i++ * 0.06) + 's';
+          node.replaceChild(w, child); s.appendChild(child); w.appendChild(s);
+        } else if (child.nodeType === 1) { wrapWords(child); }
+      });
+    };
+    wrapWords(h1);
+  }
+
+  /* Typewriter line */
+  const lines = ['> SELECT insight FROM workforce_data;', '> automate(reporting, every="morning");', '> ship(internal_tools);', '> next_role = "Product";'];
+  const typed = document.getElementById('typed');
+  if (reduce) { typed.textContent = lines[0]; } else {
+    let li = 0, ci = 0, del = false;
+    (function tick() {
+      const line = lines[li];
+      typed.textContent = line.slice(0, ci);
+      if (!del && ci < line.length) { ci++; setTimeout(tick, 45); }
+      else if (!del) { del = true; setTimeout(tick, 1600); }
+      else if (ci > 0) { ci--; setTimeout(tick, 22); }
+      else { del = false; li = (li + 1) % lines.length; setTimeout(tick, 300); }
+    })();
+  }
+
+  /* Cursor: dot follows instantly, ring follows with easing; spotlight tracks too */
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = innerWidth / 2, my = innerHeight / 3, rx = mx, ry = my;
+  window.addEventListener('pointermove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    root.style.setProperty('--mx', mx + 'px');
+    root.style.setProperty('--my', my + 'px');
+    if (finePointer && !reduce) {
+      document.body.classList.add('has-cursor');
+      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+    }
+  });
+  if (finePointer && !reduce) {
+    (function loop() {
+      rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16;
+      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+      requestAnimationFrame(loop);
+    })();
+    document.addEventListener('pointerdown', () => ring.classList.add('down'));
+    document.addEventListener('pointerup', () => ring.classList.remove('down'));
+    document.addEventListener('mouseleave', () => document.body.classList.remove('has-cursor'));
+    document.querySelectorAll('a, button, .card, .chip').forEach((el) => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+  }
+
+  /* Cards: glow follows cursor + subtle 3D tilt */
+  document.querySelectorAll('.card').forEach((card) => {
+    card.addEventListener('pointermove', (e) => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      card.style.setProperty('--cx', x + 'px');
+      card.style.setProperty('--cy', y + 'px');
+      if (!reduce && finePointer && card.classList.contains('tilt')) {
+        const rotY = ((x / r.width) - 0.5) * 8;
+        const rotX = ((y / r.height) - 0.5) * -8;
+        card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
+      }
+    });
+    card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+  });
+
+  /* Magnetic buttons */
+  if (!reduce && finePointer) {
+    document.querySelectorAll('.magnetic').forEach((btn) => {
+      btn.addEventListener('pointermove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2, y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = `translate(${x * 0.25}px, ${y * 0.35}px)`;
+      });
+      btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
+    });
+  }
+
+  /* Orbit parallax: hero graphic leans toward the cursor */
+  const orbit = document.getElementById('orbitSvg');
+  if (!reduce && finePointer) {
+    window.addEventListener('pointermove', (e) => {
+      const x = (e.clientX / innerWidth - 0.5) * 20, y = (e.clientY / innerHeight - 0.5) * 20;
+      orbit.style.transform = `translate(${x}px, ${y}px)`;
+    });
+  }
+
+  /* Count-up numbers */
+  const countUp = (el) => {
+    const to = +el.dataset.to;
+    if (el.dataset.from) return; /* the "4 -> 1" stat stays static */
+    if (reduce) { el.textContent = to; return; }
+    const start = performance.now(), dur = 1400;
+    (function step(now) {
+      const p = Math.min((now - start) / dur, 1);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    })(start);
+  };
+
+  /* Scroll reveal with stagger */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      const el = en.target;
+      const siblings = [...el.parentElement.children].filter((c) => c.classList.contains('reveal'));
+      el.style.transitionDelay = (siblings.indexOf(el) * 0.08) + 's';
+      el.classList.add('in');
+      el.querySelectorAll('.count').forEach(countUp);
+      if (el.id === 'timeline') {
+        el.querySelectorAll('li').forEach((li, i) => { li.style.transitionDelay = (0.3 + i * 0.12) + 's'; });
+      }
+      io.unobserve(el);
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+  /* Horizontal story timeline: main nodes with key-point sub-nodes */
+  const storyData = [
+    { year: '2020', side: 'up', kicker: 'Garden City University', title: 'It started with numbers',
+      subs: ['B.Com (Honours), 2020 &ndash; 2023', 'Accounting and finance foundations', 'The habit of making every figure add up'] },
+    { year: '2023', side: 'down', kicker: 'Christ University', title: 'Learning to think in systems',
+      subs: ['M.Sc. Strategic Management, 2023 &ndash; 2025', 'Business Analytics &amp; Data Governance', 'Managing Technology &amp; Innovation'] },
+    { year: 'Sep 2025', side: 'up', kicker: 'Shadowfax', title: 'Into the engine room of logistics',
+      subs: ['Joined as HR Business Partner &ndash; HR Analyst', 'Owned headcount, attendance, payroll and people cost', 'Partnered with Operations and SP&amp;A teams', 'Payroll &amp; HRBP SME for the in-house HRMS BRD'] },
+    { year: '2026', side: 'down', kicker: 'Automation', title: 'Repetitive work became software',
+      subs: ['<b>Matrix</b>: Pan-India attendance system and kiosk', 'Leadership and workforce dashboards', 'MIS and mailer engine: reporting <b>4 &rarr; 1</b> people', 'Employee self-service HR portal'] },
+    { year: '2026', side: 'up', kicker: 'Impact', title: 'And the numbers moved',
+      subs: ['Hiring cost down <b>30%</b>', 'Monthly attrition at <b>4%</b> vs a 12% average', 'Lower day-on-day absenteeism', 'Daily visibility for planning and site teams'] },
+    { year: 'Next', side: 'down', kicker: "What's next", title: 'The next chapter is product',
+      subs: ['BITSoM: Product Management with Generative &amp; Agentic AI', 'Hands-on with Jira, Figma and n8n', 'Seeking Product Analyst and APM roles', '<a href="#contact">Let\'s talk &rarr;</a>'] }
+  ];
+  const story = document.getElementById('story');
+  const sViewport = document.getElementById('storyViewport');
+  const sTrack = document.getElementById('storyTrack');
+  const sFill = document.getElementById('storyLineFill');
+  const sTraveler = document.getElementById('storyTraveler');
+  const sYear = document.getElementById('storyYear');
+  const sCount = document.getElementById('storyCount');
+  const sMeter = document.getElementById('storyFill');
+  const sHint = document.getElementById('storyHint');
+  const N = storyData.length;
+  const nodeEls = storyData.map((d) => {
+    const el = document.createElement('div');
+    el.className = 'tl-node ' + d.side;
+    el.innerHTML = `<div class="tl-stem"><i></i></div><div class="tl-dot"></div><div class="tl-year">${d.year}</div>
+      <div class="tl-card"><div class="kicker">${d.kicker}</div><h3>${d.title}</h3>
+      <ul class="subs">${d.subs.map((t) => `<li>${t}</li>`).join('')}</ul></div>`;
+    sTrack.appendChild(el);
+    return { el, subs: [...el.querySelectorAll('.subs li')] };
+  });
+  let geo = {}, lastActive = -1, sTicking = false;
+  const layoutStory = () => {
+    const vw = sViewport.clientWidth;
+    const small = vw < 640;
+    const col = small ? Math.min(330, vw - 40) : 440;
+    const pad = small ? 40 : Math.max(90, vw * 0.14);
+    const xs = storyData.map((_, i) => pad + i * col);
+    nodeEls.forEach(({ el }, i) => { el.style.left = xs[i] + 'px'; el.style.setProperty('--cardw', (col - (small ? 30 : 70)) + 'px'); });
+    const endX = xs[N - 1] + col * 0.8;
+    const trackW = endX + vw * 0.6;
+    sTrack.style.width = trackW + 'px';
+    geo = { small, vw, col, xs, startX: xs[0] - 40, endX, trackW, anchor: small ? 0.22 : 0.32 };
+  };
+  const renderStory = () => {
+    sTicking = false;
+    const total = story.offsetHeight - innerHeight;
+    const raw = Math.min(Math.max(-story.getBoundingClientRect().top / total, 0), 1);
+    const p = Math.min(raw / 0.9, 1);
+    const tx = geo.startX + p * (geo.endX - geo.startX);
+    let cur = 0; geo.xs.forEach((x, i) => { if (tx >= x - 4) cur = i; });
+    let target = tx - geo.vw * geo.anchor;
+    if (geo.small) target = Math.min(target, geo.xs[cur] - 30); /* keep the active card fully on screen */
+    const shift = Math.min(Math.max(target, 0), geo.trackW - geo.vw);
+    sTrack.style.transform = `translateX(${-shift}px)`;
+    sFill.style.width = tx + 'px';
+    sTraveler.style.left = tx + 'px';
+    sMeter.style.transform = `scaleX(${raw})`;
+    sHint.style.opacity = raw > 0.02 ? 0 : 1;
+    let active = 0;
+    nodeEls.forEach(({ el, subs }, i) => {
+      const lit = tx >= geo.xs[i] - 4;
+      if (lit) active = i;
+      el.classList.toggle('lit', lit);
+      const step = (geo.col * 0.72) / subs.length;
+      subs.forEach((li, k) => li.classList.toggle('on', tx >= geo.xs[i] + 14 + k * step));
+    });
+    nodeEls.forEach(({ el }, i) => el.classList.toggle('current', i === active));
+    if (active !== lastActive) {
+      sCount.textContent = String(active + 1).padStart(2, '0') + ' / ' + String(N).padStart(2, '0');
+      const yr = storyData[active].year.replace('Sep ', '');
+      if (sYear.textContent !== yr) {
+        sYear.classList.add('swap');
+        setTimeout(() => { sYear.textContent = yr; sYear.classList.remove('swap'); }, 250);
+      }
+      lastActive = active;
+    }
+  };
+  const queueStory = () => { if (!sTicking) { sTicking = true; requestAnimationFrame(renderStory); } };
+  layoutStory(); renderStory();
+  window.addEventListener('scroll', queueStory, { passive: true });
+  window.addEventListener('resize', () => { layoutStory(); queueStory(); });
+
+  /* Scroll progress + active nav link */
+  const bar = document.getElementById('progress');
+  const links = [...document.querySelectorAll('#navLinks a')];
+  const sections = links.map((a) => document.querySelector(a.getAttribute('href')));
+  const onScroll = () => {
+    const h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`;
+    let current = -1;
+    sections.forEach((s, i) => { if (s && s.getBoundingClientRect().top < innerHeight * 0.4) current = i; });
+    links.forEach((a, i) => a.classList.toggle('active', i === current));
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
 </body>
 </html>
